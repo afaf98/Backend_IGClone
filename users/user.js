@@ -16,7 +16,7 @@ const users = [
     id: "2",
     name: "Ron",
     lastName: "Wisley",
-    image: "2",
+    image: ["2", "1", "3"],
   },
 ];
 
@@ -48,5 +48,18 @@ router.post("/user", (req, res) => {
   users.push({ id: v4(), ...user }); //add an id
   res.send(users); //display updated users
 });
+
+//Post route to add Picture in an user account
+//### NEED SOE WORK THIS POST REQUEST
+
+// router.post("/user/:userid/image", (req, res) => {
+//   const userAddImage = users.map((user) => {
+//     if (req.params.userid === user.id) {
+//       const imageToAdd = req.body;
+//       imageToAdd.push({ ...user, imageToAdd });
+//     }
+//   });
+//   res.status(200).send(userAddImage);
+// });
 
 module.exports = router;
