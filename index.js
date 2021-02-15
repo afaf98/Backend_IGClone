@@ -6,7 +6,7 @@ const cors = require("cors")
 const testRoute = require("./testRoute.js");
 
 app.use(express.json());
-app.use(cors)
+app.use(cors())
 
 app.use(testRoute)
 
