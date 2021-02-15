@@ -7,7 +7,7 @@ describe("testing test route", () => {
   test("should fail to check if the CI is working", async (done) => {
     const response = await server.get("/test");
 
-    expect(response.status).not.toBe(200);
+    expect(response.status).toBe(200);
     done();
   });
 });
