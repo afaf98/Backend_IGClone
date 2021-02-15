@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test" : " npx jest --detectOpenHandles --runInBand",
+    "test:watch" : "npx jest --runInBand --watch"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +16,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jest": "^26.6.3",
     "nodemon": "^2.0.6",
+    "supertest": "^6.1.3",
     "uuid": "^8.3.2"
   }
 }
