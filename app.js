@@ -2,11 +2,11 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-const testRoute = require("./testRoute.js");
+const user = require("./router/user.js");
 
 app.use(express.json());
 app.use(cors());
 
-app.use(testRoute);
+app.use(user);
 
 module.exports = app;
