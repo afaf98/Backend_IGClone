@@ -2,6 +2,7 @@ const request = require("supertest");
 const app = require("../../app");
 const db = require("../../models");
 const server = request(app);
+const { verifyToken } = require("../../auth/utils");
 
 describe("post /login", () => {
   afterAll(async () => {
@@ -31,7 +32,6 @@ describe("post /login", () => {
     const response = await server
       .post("/login")
       .send({ email: "ciao@ciao.com", password: "12345678910" });
-    // console.log("error", response.body.errors);
     expect(response.status).toBe(401);
     expect(response.body.message).toEqual("Email or password is incorrect");
 
@@ -65,9 +65,24 @@ describe("post /login", () => {
       .send({ email: "ciao@ciao.com", password: "12345678" });
 
     expect(response.status).toBe(200);
-    expect(response.body.token.length).toBe(144);
+    expect(response.body.token).toBeDefined();
 
     done();
   });
-  test.todo("The user id should be encrypted inside of the token");
+  test("The user id should be encrypted inside of the token", async (done) => {
+    const user = await db.User.create({
+      name: "ciao",
+      lastName: "ciao",
+      email: "ciao@ciao.com",
+      password: "12345678",
+    });
+    const response = await server
+      .post("/login")
+      .send({ email: "ciao@ciao.com", password: "12345678" });
+    const data = verifyToken(response.body.token);
+
+    expect(data.userId).toBeDefined();
+
+    done();
+  });
 });

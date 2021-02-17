@@ -1,37 +1,12 @@
 const express = require("express");
-const { User } = require("../models");
 const yup = require("yup");
-var jwt = require("jsonwebtoken");
 const validate = require("../validation/validate");
+const { createToken, authenticateUser } = require("../auth/utils");
 
 const { Router } = express;
 
 const router = new Router();
 
-async function authenticateUser(email, password) {
-  const findUser = await User.findOne({
-    where: {
-      email: email,
-    },
-  });
-  if (!findUser) {
-    return null;
-  }
-
-  const match = await findUser.comparePassword(password);
-
-  if (!match) {
-    return null;
-  }
-
-  return findUser;
-}
-function createToken(userId) {
-  var token = jwt.sign({ userId: userId }, process.env.JWT_SECRET, {
-    expiresIn: "4h",
-  });
-  return token;
-}
 router.post(
   "/login",
   validate(
