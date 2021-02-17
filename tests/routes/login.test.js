@@ -21,14 +21,17 @@ describe("post /login", () => {
     const response = await server.post("/login").send({});
 
     expect(response.status).toBe(400);
-    expect(response.body.errors).toEqual(null);
+    expect(response.body.errors).toEqual([
+      "email is a required field",
+      "password is a required field",
+    ]);
     done();
   });
   test("Should respond with an error when the user is not found.", async (done) => {
     const response = await server
       .post("/login")
-      .send({ email: "ciao@ciao.com", password: "12345678" });
-
+      .send({ email: "ciao@ciao.com", password: "12345678910" });
+    // console.log("error", response.body.errors);
     expect(response.status).toBe(401);
     expect(response.body.message).toEqual("Email or password is incorrect");
 
@@ -50,24 +53,21 @@ describe("post /login", () => {
 
     done();
   });
-  test.todo(
-    "Should respond with a token when the user is successfully authenticated",
-    async (done) => {
-      const user = await db.User.create({
-        name: "ciao",
-        lastName: "ciao",
-        email: "ciao@ciao.com",
-        password: "12345678",
-      });
-      const response = await server
-        .post("/login")
-        .send({ email: "ciao@ciao.com", password: "12345678" });
+  test("Should respond with a token when the user is successfully authenticated", async (done) => {
+    const user = await db.User.create({
+      name: "ciao",
+      lastName: "ciao",
+      email: "ciao@ciao.com",
+      password: "12345678",
+    });
+    const response = await server
+      .post("/login")
+      .send({ email: "ciao@ciao.com", password: "12345678" });
 
-      expect(response.status).toBe(200);
-      expect(response.body.token).toBeDefined();
+    expect(response.status).toBe(200);
+    expect(response.body.token).toBeDefined();
 
-      done();
-    }
-  );
+    done();
+  });
   test.todo("The user id should be encrypted inside of the token");
 });

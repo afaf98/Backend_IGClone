@@ -1,19 +1,17 @@
 const express = require("express");
 const { User } = require("../models");
 const yup = require("yup");
+const bcrypt = require("bcrypt");
 const validate = require("../validation/validate");
 
 const { Router } = express;
 
 const router = new Router();
 
-//Testing route
 router.post(
-  "/user",
+  "/login",
   validate(
     yup.object().shape({
-      name: yup.string().required(),
-      lastName: yup.string().required(),
       email: yup.string().email().required(),
       password: yup.string().min(8).required(),
     }),
@@ -21,24 +19,29 @@ router.post(
   ),
   async (req, res) => {
     try {
-      const [user, isNewUser] = await User.findOrCreate({
+      const findUser = await User.findOne({
         where: {
           email: req.validatedBody.email,
         },
-        defaults: {
-          ...req.validatedBody,
-        },
       });
-      if (isNewUser) {
-        res.status(201).json({ message: "User created" });
+      if (findUser) {
+        const match = await bcrypt.compare(
+          req.validatedBody.password,
+          findUser.password
+        );
+        if (match) {
+          res
+            .status(200)
+            .json({ message: "You are now logged in", token: "maketokenhere" });
+        } else {
+          res.status(401).json({ message: "Email or password is incorrect" });
+        }
       } else {
-        res
-          .status(409)
-          .json({ message: "User with this email already exist." });
+        res.status(401).json({ message: "Email or password is incorrect" });
       }
     } catch (error) {
       console.log("Error", error);
-      res.status(500).json("Internal server error");
+      res.status(500).json({ message: "Internal error" });
     }
   }
 );
