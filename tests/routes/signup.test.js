@@ -29,6 +29,7 @@ describe("post /user", () => {
     });
 
     expect(response.status).toBe(201);
+    expect(response.body.message).toBe("User created");
 
     done();
   });
@@ -119,7 +120,7 @@ describe("post /user", () => {
 
     done();
   });
-  test("Should check if the password have 8 characters", async (done) => {
+  test("Should check if the password has at least 8 characters", async (done) => {
     const newUser = {
       name: "bla",
       lastName: "bla",
@@ -129,7 +130,7 @@ describe("post /user", () => {
     const response = await server.post("/user").send(newUser);
 
     expect(response.body.errors).toEqual([
-      "password must be exactly 8 characters",
+      "password must be at least 8 characters",
     ]);
 
     done();

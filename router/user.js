@@ -18,29 +18,22 @@ router.post(
       name: yup.string().required(),
       lastName: yup.string().required(),
       email: yup.string().email().required(),
-      password: yup.string().length(8).required(),
+      password: yup.string().min(8).required(),
     }),
     "body"
   ),
   async (req, res) => {
     try {
-      const password = await bcrypt.hash(
-        req.validatedBody.password,
-        saltRounds
-      );
       const [user, isNewUser] = await User.findOrCreate({
         where: {
           email: req.validatedBody.email,
         },
         defaults: {
-          name: req.validatedBody.name,
-          lastName: req.validatedBody.lastName,
-          email: req.validatedBody.email,
-          password: password,
+          ...req.validatedBody,
         },
       });
       if (isNewUser) {
-        res.status(201).json("hello world!");
+        res.status(201).json({ message: "User created" });
       } else {
         res
           .status(409)

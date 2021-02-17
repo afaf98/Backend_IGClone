@@ -8,6 +8,7 @@ module.exports = {
   test: {
     use_env_variable: "TEST_DATABASE",
     dialect: "postgres",
+    logging: false,
   },
   production: {
     username: "root",
