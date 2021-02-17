@@ -65,7 +65,7 @@ describe("post /login", () => {
       .send({ email: "ciao@ciao.com", password: "12345678" });
 
     expect(response.status).toBe(200);
-    expect(response.body.token).toBeDefined();
+    expect(response.body.token.length).toBe(144);
 
     done();
   });
