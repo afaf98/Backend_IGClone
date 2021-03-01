@@ -2,11 +2,13 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-const testRoute = require("./testRoute.js");
+const user = require("./router/user.js");
+const login = require("./router/login");
 
 app.use(express.json());
 app.use(cors());
 
-app.use(testRoute);
+app.use(user);
+app.use(login);
 
 module.exports = app;
