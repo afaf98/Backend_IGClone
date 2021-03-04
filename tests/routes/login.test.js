@@ -39,7 +39,7 @@ describe("post /login", () => {
   });
   test("Should respond with an error if the password doesn't match.", async (done) => {
     const user = await db.User.create({
-      name: "ciao",
+      firstName: "ciao",
       lastName: "ciao",
       email: "ciao@ciao.com",
       password: "12345678",
@@ -55,7 +55,7 @@ describe("post /login", () => {
   });
   test("Should respond with a token when the user is successfully authenticated", async (done) => {
     const user = await db.User.create({
-      name: "ciao",
+      firstName: "ciao",
       lastName: "ciao",
       email: "ciao@ciao.com",
       password: "12345678",
@@ -71,7 +71,7 @@ describe("post /login", () => {
   });
   test("The user id should be encrypted inside of the token", async (done) => {
     const user = await db.User.create({
-      name: "ciao",
+      firstName: "ciao",
       lastName: "ciao",
       email: "ciao@ciao.com",
       password: "12345678",
