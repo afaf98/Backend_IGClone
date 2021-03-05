@@ -2,6 +2,7 @@ const express = require("express");
 const { User } = require("../models");
 const yup = require("yup");
 const validate = require("../validation/validate");
+const { createToken, authenticateUser } = require("../auth/utils");
 
 const { Router } = express;
 
@@ -29,8 +30,14 @@ router.post(
           ...req.validatedBody,
         },
       });
+      const findUser = await authenticateUser(
+        req.validatedBody.email,
+        req.validatedBody.password
+      );
       if (isNewUser) {
-        res.status(201).json({ message: "User created" });
+        res
+          .status(201)
+          .json({ message: "User created", token: createToken(findUser.id) });
       } else {
         res
           .status(409)
