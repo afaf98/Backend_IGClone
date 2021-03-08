@@ -2,8 +2,6 @@ const db = require("../../models");
 const authMiddleware = require("../../auth/middleware.js");
 const { createToken } = require("../../auth/utils");
 
-//import middleware
-
 describe.only("auth middleware", () => {
   afterAll(async () => {
     await db.sequelize.close();
