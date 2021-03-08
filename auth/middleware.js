@@ -7,7 +7,6 @@ async function middleware(req, res, next) {
   const user = await db.User.findByPk(verifiedToken.userId);
 
   req.user = user;
-
   next();
 }
 

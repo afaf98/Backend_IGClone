@@ -2,7 +2,9 @@ const express = require("express");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
+const db = require("../models");
 const configCloudinary = require("../config/cloudinary");
+const authMiddleware = require("../auth/middleware");
 
 const { Router } = express;
 
@@ -21,10 +23,17 @@ const storage = new CloudinaryStorage({
 
 const parser = multer({ storage: storage });
 
-router.post("/upload", parser.single("image"), (req, res) => {
+router.post("/images", authMiddleware, parser.single("image"), (req, res) => {
   try {
-    console.log("request", req.file);
-    res.status(200).json({ message: "Image uploaded" });
+    console.log("request", req.user);
+    const image = db.Image.create({
+      name: req.file.originalname,
+      url: req.file.path,
+      userId: req.user.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    res.status(201).json({ message: "Image uploaded", url: req.file.path });
   } catch (error) {
     console.log("Error", error);
   }

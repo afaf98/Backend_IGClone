@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static associate(models) {
-      User.hasMany(models.Image);
+      User.hasMany(models.Image, { foreignKey: "userId" });
     }
   }
   User.init(
