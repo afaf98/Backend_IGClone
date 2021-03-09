@@ -5,7 +5,11 @@ const { createToken } = require("../../auth/utils");
 
 const server = request(app);
 
-describe.only("post /images", () => {
+//Unhappy path
+// not compatible file
+// not allowed to modify images from other users (later)
+
+describe.skip("post /images", () => {
   afterAll(async () => {
     await db.sequelize.close();
   });
@@ -22,9 +26,6 @@ describe.only("post /images", () => {
     done();
   });
   test("should ", async (done) => {
-    //You need to add file in your request X
-    //We need to make a token and send it in the request X
-    // The request must be of type  "Content-Type": "multipart/form-data" X
     const user = await db.User.create({
       firstName: "bla",
       lastName: "bla",
@@ -48,7 +49,7 @@ describe.only("post /images", () => {
   test.skip("should not accept a post request without a token", async (done) => {
     const response = await server.post("/images");
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(401);
     done();
   });
 });

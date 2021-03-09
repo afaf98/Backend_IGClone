@@ -23,20 +23,26 @@ const storage = new CloudinaryStorage({
 
 const parser = multer({ storage: storage });
 
-router.post("/images", authMiddleware, parser.single("image"), (req, res) => {
-  try {
-    console.log("request", req.user);
-    const image = db.Image.create({
-      name: req.file.originalname,
-      url: req.file.path,
-      userId: req.user.id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-    res.status(201).json({ message: "Image uploaded", url: req.file.path });
-  } catch (error) {
-    console.log("Error", error);
+router.post(
+  "/images",
+  authMiddleware,
+  parser.single("image"),
+  async (req, res) => {
+    try {
+      // console.log("request", req.user);
+      const image = await db.Image.create({
+        name: req.file.originalname,
+        url: req.file.path,
+        userId: req.user.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      // console.log("image", image);
+      res.status(201).json({ message: "Image uploaded", url: req.file.path });
+    } catch (error) {
+      console.log("Error", error);
+    }
   }
-});
+);
 
 module.exports = router;
