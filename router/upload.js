@@ -16,8 +16,10 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "some-folder-name",
-    format: async (req, file) => "png", // supports promises as well
-    public_id: (req, file) => "computed-filename-using-request",
+    format: async (req, file) => file.mimetype.split("/")[1], // supports promises as well
+    public_id: (req, file) => {
+      console.log("File", file);
+    },
   },
 });
 
@@ -29,7 +31,7 @@ router.post(
   parser.single("image"),
   async (req, res) => {
     try {
-      // console.log("request", req.user);
+      console.log("req", req.file.originalname);
       const image = await db.Image.create({
         name: req.file.originalname,
         url: req.file.path,
@@ -37,8 +39,8 @@ router.post(
         createdAt: new Date(),
         updatedAt: new Date(),
       });
-      // console.log("image", image);
       res.status(201).json({ message: "Image uploaded", url: req.file.path });
+      console.log("Image");
     } catch (error) {
       console.log("Error", error);
     }
