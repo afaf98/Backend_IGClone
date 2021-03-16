@@ -22,7 +22,7 @@ describe("post /user", () => {
 
   test("should create a new user with an email an password", async (done) => {
     const response = await server.post("/user").send({
-      name: "bla",
+      firstName: "bla",
       lastName: "bla",
       email: "bla@bla.com",
       password: "12345678",
@@ -30,6 +30,7 @@ describe("post /user", () => {
 
     expect(response.status).toBe(201);
     expect(response.body.message).toBe("User created");
+    expect(response.body.token).toBeDefined();
 
     done();
   });
@@ -42,7 +43,7 @@ describe("post /user", () => {
     //See what yup gives as an error
     expect(response.body.message).toEqual("Bad request");
     expect(response.body.errors).toEqual([
-      "name is a required field",
+      "firstName is a required field",
       "lastName is a required field",
       "email is a required field",
       "password is a required field",
@@ -54,7 +55,7 @@ describe("post /user", () => {
   test("Should add user to the database", async (done) => {
     // arrange
     const newUser = {
-      name: "bla",
+      firstName: "bla",
       lastName: "bla",
       email: "bla@bla.com",
       password: "12345678",
@@ -74,7 +75,7 @@ describe("post /user", () => {
   test("Should store users passwords as a bcrypt hash not as text", async (done) => {
     // arrange
     const newUser = {
-      name: "bla",
+      firstName: "bla",
       lastName: "bla",
       email: "bla@bla.com",
       password: "12345678",
@@ -93,7 +94,7 @@ describe("post /user", () => {
   });
   test("Should validate if the email is unique  in the database ", async (done) => {
     const newUser = {
-      name: "bla",
+      firstName: "bla",
       lastName: "bla",
       email: "bla@bla.com",
       password: "12345678",
@@ -109,7 +110,7 @@ describe("post /user", () => {
   });
   test("Should check if the email is in the right format", async (done) => {
     const newUser = {
-      name: "bla",
+      firstName: "bla",
       lastName: "bla",
       email: "blabla.com",
       password: "12345678",
@@ -122,7 +123,7 @@ describe("post /user", () => {
   });
   test("Should check if the password has at least 8 characters", async (done) => {
     const newUser = {
-      name: "bla",
+      firstName: "bla",
       lastName: "bla",
       email: "bla@bla.com",
       password: "1234",
