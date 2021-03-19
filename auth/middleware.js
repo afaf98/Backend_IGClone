@@ -32,9 +32,14 @@ async function middleware(req, res, next) {
     req.user = user;
     next();
   } catch (error) {
-    console.log("Error", error);
-    if (error.name === "JsonWebTokenError") {
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
       res.status(401).json({ message: error.name, errors: [error.message] });
+    } else {
+      console.log("Error", error);
+      res.status(500).json({ message: "Something went wrong", errors: [] });
     }
   }
 }
