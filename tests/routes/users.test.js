@@ -10,18 +10,10 @@ describe("get /followers", () => {
   });
 
   beforeEach(async () => {
-    await db.Follower.destroy({ truncate: true, cascade: true });
     await db.User.destroy({ truncate: true, cascade: true });
   });
-  test("should be an authenticated route", async (done) => {
-    const response = await server.get("/followers");
 
-    expect(response.status).not.toBe(404);
-    expect(response.status).toBe(401);
-
-    done();
-  });
-  test("should return all followers when a valid token is sent", async (done) => {
+  test("should response with a list of users", async (done) => {
     const user = await db.User.create({
       firstName: "bla",
       lastName: "bla",
@@ -34,18 +26,13 @@ describe("get /followers", () => {
       email: "a@a.com",
       password: "12345678",
     });
-
-    const token = createToken(user.id);
-    await user.addFollowers(secondUser);
-
-    const response = await server
-      .get("/followers")
-      .set("Authorization", `Bearer ${token}`);
+    const response = await server.get("/users");
 
     expect(response.status).toBe(200);
-    expect(response.body.followers[0].firstName).toBe("a");
-    expect(response.body.followers[0].id).toBe(secondUser.id);
-    expect(response.body.followers[0].password).not.toBeDefined();
+    expect(response.body.users).toEqual([
+      { firstName: "bla", lastName: "bla", id: user.id },
+      { firstName: "a", lastName: "a", id: secondUser.id },
+    ]);
 
     done();
   });

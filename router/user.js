@@ -3,6 +3,7 @@ const { User } = require("../models");
 const yup = require("yup");
 const validate = require("../validation/validate");
 const { createToken, authenticateUser } = require("../auth/utils");
+const db = require("../models");
 
 const { Router } = express;
 
@@ -49,5 +50,17 @@ router.post(
     }
   }
 );
+
+router.get("/users", async (req, res) => {
+  try {
+    const users = await db.User.findAll({
+      attributes: ["firstName", "lastName", "id"],
+    });
+    res.status(200).json({ message: "Ok", users: users });
+  } catch (error) {
+    console.log("Error GET /users", error);
+    res.status(500).json({message: "Internal server error", errors : [error]})
+  }
+});
 
 module.exports = router;
