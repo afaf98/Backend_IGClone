@@ -2,6 +2,7 @@
 const { Model } = require("sequelize");
 
 const bcrypt = require("bcrypt");
+const follower = require("./follower");
 const saltRound = 10;
 
 module.exports = (sequelize, DataTypes) => {
@@ -17,6 +18,18 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       User.hasMany(models.Image, { foreignKey: "userId" });
+      User.belongsToMany(models.User, {
+        through: "Follower",
+        foreignKey: "followerId",
+        otherKey: "followingId",
+        as: "followers",
+      });
+      User.belongsToMany(models.User, {
+        through: "Follower",
+        foreignKey: "followingId",
+        otherKey: "followerId",
+        as: "following",
+      });
     }
   }
   User.init(
