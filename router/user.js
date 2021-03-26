@@ -59,7 +59,7 @@ router.get("/users", async (req, res) => {
     res.status(200).json({ message: "Ok", users: users });
   } catch (error) {
     console.log("Error GET /users", error);
-    res.status(500).json({message: "Internal server error", errors : [error]})
+    res.status(500).json({ message: "Internal server error", errors: [error] });
   }
 });
 

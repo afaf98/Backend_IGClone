@@ -49,7 +49,7 @@ describe("get /followers", () => {
 
     done();
   });
-  test("should return all followers when a valid token is sent", async (done) => {
+  test("should follow a new user", async (done) => {
     const user = await db.User.create({
       firstName: "bla",
       lastName: "bla",
@@ -74,7 +74,7 @@ describe("get /followers", () => {
 
     done();
   });
-  test("should return all followers when a valid token is sent", async (done) => {
+  test("should check if the user you want to follow exist", async (done) => {
     const user = await db.User.create({
       firstName: "bla",
       lastName: "bla",
@@ -90,6 +90,31 @@ describe("get /followers", () => {
 
     expect(response.status).toBe(404);
     expect(response.body.message).toBe("This user does not exist");
+
+    done();
+  });
+  test("should unfollow a user", async (done) => {
+    const user = await db.User.create({
+      firstName: "bla",
+      lastName: "bla",
+      email: "bla@bla.com",
+      password: "12345678",
+    });
+    const secondUser = await db.User.create({
+      firstName: "a",
+      lastName: "a",
+      email: "a@a.com",
+      password: "12345678",
+    });
+    const token = createToken(user.id);
+    await user.addFollowers(secondUser);
+
+    const response = await server
+      .delete(`/followers/${secondUser.id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("You unfollowed a");
 
     done();
   });
