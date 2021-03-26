@@ -23,22 +23,7 @@ describe("get /home", () => {
     expect(response.status).not.toBe(404);
     done();
   });
-  test.skip("should make a GET request with a valid token from a user", async (done) => {
-    const user = await db.User.create({
-      firstName: "bla",
-      lastName: "bla",
-      email: "bla@bla.com",
-      password: "12345678",
-    });
-    const token = createToken(user.id);
 
-    const response = await server
-      .get("/profile")
-      .set("Authorization", `Bearer ${token}`);
-
-    expect(response.status).toBe(200);
-    done();
-  });
   test("should get all images from a user", async (done) => {
     const user = await db.User.create({
       firstName: "bla",

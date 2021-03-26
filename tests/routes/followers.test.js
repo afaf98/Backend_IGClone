@@ -49,4 +49,48 @@ describe("get /followers", () => {
 
     done();
   });
+  test("should return all followers when a valid token is sent", async (done) => {
+    const user = await db.User.create({
+      firstName: "bla",
+      lastName: "bla",
+      email: "bla@bla.com",
+      password: "12345678",
+    });
+    const secondUser = await db.User.create({
+      firstName: "a",
+      lastName: "a",
+      email: "a@a.com",
+      password: "12345678",
+    });
+
+    const token = createToken(user.id);
+
+    const response = await server
+      .post(`/followers/${secondUser.id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("You now follow a");
+
+    done();
+  });
+  test("should return all followers when a valid token is sent", async (done) => {
+    const user = await db.User.create({
+      firstName: "bla",
+      lastName: "bla",
+      email: "bla@bla.com",
+      password: "12345678",
+    });
+
+    const token = createToken(user.id);
+
+    const response = await server
+      .post(`/followers/0`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("This user does not exist");
+
+    done();
+  });
 });
