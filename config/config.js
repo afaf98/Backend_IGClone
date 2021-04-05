@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+console.log("process", process.env);
 module.exports = {
   development: {
     use_env_variable: "DEVELOPMENT_DATABASE",
