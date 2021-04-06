@@ -59,6 +59,7 @@ router.get("/users", async (req, res) => {
         {
           model: db.Image,
           limit: 1,
+          order: [["createdAt", "DESC"]],
         },
       ],
     });
@@ -69,7 +70,7 @@ router.get("/users", async (req, res) => {
           id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
-          latestImage: user.Images[0].url,
+          latestImage: user.Images[0] ? user.Images[0].url : null,
         };
       }),
     });
