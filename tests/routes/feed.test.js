@@ -77,11 +77,9 @@ describe.only("get /feed", () => {
       updatedAt: new Date(),
     });
 
-
-
     const token = createToken(user.id);
     await user.addFollowers(secondUser);
-    await user.addFollowers(thirdUser)
+    await user.addFollowers(thirdUser);
 
     const response = await server
       .get("/feed")
@@ -91,10 +89,10 @@ describe.only("get /feed", () => {
     expect(response.body.images[0].name).toBe("latest");
     expect(response.body.images[1].name).toBe("middle");
     expect(response.body.images[2].name).toBe("oldest");
-    expect(response.body.images.length).toBe(3);
+    expect(response.body.images[0].userFirstName).toBe("a");
 
+    expect(response.body.images.length).toBe(3);
 
     done();
   });
-  
 });
