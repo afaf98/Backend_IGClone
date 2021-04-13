@@ -23,7 +23,6 @@ router.get("/feed", authMiddleware, async (req, res) => {
       order: [["createdAt", "DESC"]],
       include: [{ model: db.User, attributes: [] }],
     });
-    console.log("image", images);
     res.status(200).json({
       message: "Ok",
       images: images,
