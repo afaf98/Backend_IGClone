@@ -55,8 +55,25 @@ router.get("/users", async (req, res) => {
   try {
     const users = await db.User.findAll({
       attributes: ["firstName", "lastName", "id"],
+      include: [
+        {
+          model: db.Image,
+          limit: 1,
+          order: [["createdAt", "DESC"]],
+        },
+      ],
     });
-    res.status(200).json({ message: "Ok", users: users });
+    res.status(200).json({
+      message: "Ok",
+      users: users.map((user) => {
+        return {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          latestImage: user.Images[0] ? user.Images[0].url : null,
+        };
+      }),
+    });
   } catch (error) {
     console.log("Error GET /users", error);
     res.status(500).json({ message: "Internal server error", errors: [error] });

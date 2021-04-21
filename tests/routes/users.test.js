@@ -26,12 +26,38 @@ describe("get /followers", () => {
       email: "a@a.com",
       password: "12345678",
     });
+    const userImage = await db.Image.create({
+      name: "Tryout",
+      url:
+        "https://image.shutterstock.com/image-photo/funny-cat-smile-on-cardboard-260nw-1031589889.jpg",
+      userId: user.id,
+    });
+    const secondUserImage = await db.Image.create({
+      name: "Tryout2user",
+      url:
+        "https://image.shutterstock.com/image-photo/funny-cat-smile-on-cardboard-260nw-1031589889.jpg",
+      userId: secondUser.id,
+    });
+    //Create 2 images associate them
+    // as a response + latest image
     const response = await server.get("/users");
 
     expect(response.status).toBe(200);
     expect(response.body.users).toEqual([
-      { firstName: "bla", lastName: "bla", id: user.id },
-      { firstName: "a", lastName: "a", id: secondUser.id },
+      {
+        firstName: "bla",
+        lastName: "bla",
+        id: user.id,
+        latestImage:
+          "https://image.shutterstock.com/image-photo/funny-cat-smile-on-cardboard-260nw-1031589889.jpg",
+      },
+      {
+        firstName: "a",
+        lastName: "a",
+        id: secondUser.id,
+        latestImage:
+          "https://image.shutterstock.com/image-photo/funny-cat-smile-on-cardboard-260nw-1031589889.jpg",
+      },
     ]);
 
     done();
