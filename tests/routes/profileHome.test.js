@@ -53,7 +53,7 @@ describe("get /home", () => {
 
     done();
   });
-  test("should give an error if no images are found from a user", async (done) => {
+  test("should not give an error if no images are found from a user", async (done) => {
     const user = await db.User.create({
       firstName: "bla",
       lastName: "bla",
@@ -66,8 +66,8 @@ describe("get /home", () => {
       .get("/profile")
       .set("Authorization", `Bearer ${token}`);
 
-    expect(response.status).toBe(404);
-    expect(response.body.message).toEqual("No images are found");
+    expect(response.status).toBe(200);
+    expect(response.body.images.length).toBe(0);
 
     done();
   });

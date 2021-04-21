@@ -8,17 +8,15 @@ const router = new Router();
 
 router.get("/profile", authMiddleware, async (req, res) => {
   try {
-    const images = await Image.findAll({ where: { userId: req.user.id } });
-    if (images.length === 0) {
-      return res.status(404).json({
-        message: "No images are found",
-      });
-    } else {
-      return res.status(200).json({
-        images: images,
-        user: { name: req.user.firstName, lastName: req.user.lastName },
-      });
-    }
+    const images = await Image.findAll({
+      where: { userId: req.user.id },
+      order: [["createdAt", "DESC"]],
+    });
+    return res.status(200).json({
+      profileImage: images.length === 0 ? null : images[0].url,
+      images: images,
+      user: { name: req.user.firstName, lastName: req.user.lastName },
+    });
   } catch (error) {
     console.log("Error", error);
   }
