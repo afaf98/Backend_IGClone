@@ -28,4 +28,9 @@ jobs:
       # Runs a single command using the runners shell
       - name: End to end tests
         run: npm install && npm run test
-
+        env:
+              TEST_DATABASE: ${{ secrets.TEST_DATABASE }}
+              JWT_SECRET: ${{ secrets.JWT_SECRET }}
+              CLOUDINARY_APIKEY: ${{ secrets.CLOUDINARY_APIKEY }}
+              CLOUDINARY_SECRET: ${{ secrets.CLOUDINARY_SECRET }}
+              CLOUDINARY_CLOUDNAME: ${{ secrets.CLOUDINARY_CLOUDNAME }}      
